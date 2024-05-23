@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Data Visualization</title>
+    <!-- Chart.js CDN 추가 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<canvas id="realTimeChart" width="600" height="400"></canvas>
+
+<script>
+    // 차트를 그리기 위한 초기 데이터
+    var data = {
+        labels: [],
+        datasets: [{
+            label: 'Mpu Data',
+            data: [],
+            borderColor: 'blue',
+            fill: false
+        }]
+    };
+
+    // 차트 옵션 설정
+    var options = {
+        scales: {
+            xAxes: [{
+                type: 'realtime' // 실시간 스케일
+            }]
+        }
+    };
+
+    // 실시간 차트 생성
+    var ctx = document.getElementById('realTimeChart').getContext('2d');
+    var realTimeChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: options
+    });
+
+    // 실시간 데이터 업데이트
+    function updateRealTimeData(newData) {
+        // 새 데이터를 데이터셋에 추가
+        realTimeChart.data.labels.push('');
+        realTimeChart.data.datasets[0].data.push(newData);
+
+        // 최대 10개까지 데이터 유지
+        var maxDataPoints = 10;
+        if (realTimeChart.data.labels.length > maxDataPoints) {
+            realTimeChart.data.labels.shift();
+            realTimeChart.data.datasets[0].data.shift();
+        }
+
+        // 차트 업데이트
+        realTimeChart.update();
+    }
+
+    // 실제로 데이터가 들어오는 상황을 가정하여 매 초마다 새 데이터를 추가하는 함수
+    function simulateRealTimeData() {
+        setInterval(function() {
+            var newData = Math.random() * 100; // 새 데이터 생성 (임시)
+            updateRealTimeData(newData); // 차트에 데이터 추가
+        }, 1000); // 1초마다 데이터 추가
+    }
+
+    // 시뮬레이션 시작
+    simulateRealTimeData();
+</script>
+</body>
+</html>

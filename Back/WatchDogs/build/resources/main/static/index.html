@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Received Data</title>
+</head>
+<body>
+<h1>Received Data</h1>
+<div id="receivedData"></div>
+
+<script>
+    // 서버에 데이터 요청
+    fetch('/sensorData')
+        .then(response => response.text())
+        .then(data => {
+            // 받은 데이터를 출력
+            document.getElementById('receivedData').innerText = data;
+        })
+        .catch(error => console.error('Error:', error));
+</script>
+</body>
+</html>
